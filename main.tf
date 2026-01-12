@@ -8,14 +8,14 @@ terraform {
 }
 
 provider "google" {
-  credentials = "./terraform-key.json"
-  project     = "dogwood-wharf-456103-t1"
-  region      = "us-central1"
+  credentials = file(var.credentials)
+  project     = var.project
+  region      = var.region
 }
 
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "dogwood-wharf-456103-t1-terra-bucket"
-  location      = "US"
+  name          = var.gsc_bucket_name
+  location      = var.location
   force_destroy = true
 
 
@@ -28,4 +28,9 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+resource "google_bigquery_dataset" "demo-dataset" {
+  dataset_id = var.bq_dataset_name
+  location = var.location
 }
